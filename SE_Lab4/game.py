@@ -7,6 +7,13 @@ class DotsAndBoxes:
         self.current = 0
         self.scores = [0, 0]
 
+    def read_move(self):
+        try:
+            return input(f"Player {self.current + 1}, move: ").strip().upper()
+        except (EOFError, KeyboardInterrupt):
+            print("\nInput closed. Exiting game. Goodbye!")
+            return None
+
     def run(self):
         print("Dots and Boxes")
         print("Enter moves as H row col or V row col.")
@@ -15,16 +22,22 @@ class DotsAndBoxes:
 
         while not self.board.is_complete():
             self.board.display(self.scores, self.current)
-            raw = input(f"Player {self.current + 1}, move: ").strip().upper()
-            parts = raw.split()
+            raw = self.read_move()
+            if raw is None:
+                return
 
+            parts = raw.split()
             if len(parts) != 3:
-                print("Invalid format.")
+                print("Invalid format. Use: H row col or V row col.")
                 continue
 
             orientation, row, col = parts
-            if not row.isdigit() or not col.isdigit():
-                print("Row and column must be numbers.")
+            if orientation not in {"H", "V"}:
+                print("Orientation must be H or V.")
+                continue
+
+            if not (row.isascii() and row.isdigit() and col.isascii() and col.isdigit()):
+                print("Row and column must be whole numbers (0-9).")
                 continue
 
             row, col = int(row), int(col)
