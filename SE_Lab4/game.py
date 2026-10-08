@@ -33,7 +33,7 @@ class DotsAndBoxes:
                 continue
 
             before = set(self.board.completed)
-            self.board.add_line(orientation, row, col)
+            self.board.add_line(orientation, row, col, self.current + 1)
             newly_completed = completed_boxes(self.board, before)
 
             if newly_completed:

@@ -5,24 +5,28 @@ class Board:
         self.horizontal = [[False] * cols for _ in range(rows + 1)]
         self.vertical = [[False] * (cols + 1) for _ in range(rows)]
         self.completed = set()
+        self.owners = {}
 
-    def add_line(self, orientation, row, col):
+    def add_line(self, orientation, row, col, player=None):
         if orientation == "H":
             self.horizontal[row][col] = True
         else:
             self.vertical[row][col] = True
-        self._update_completed()
+        self._update_completed(player)
 
-    def _update_completed(self):
+    def _update_completed(self, player=None):
         for r in range(self.rows):
             for c in range(self.cols):
                 if (
-                    self.horizontal[r][c]
+                    (r, c) not in self.completed
+                    and self.horizontal[r][c]
                     and self.horizontal[r + 1][c]
                     and self.vertical[r][c]
                     and self.vertical[r][c + 1]
                 ):
                     self.completed.add((r, c))
+                    if player is not None:
+                        self.owners[(r, c)] = player
 
     def is_complete(self):
         total = self.rows * (self.cols + 1) + self.cols * (self.rows + 1)
@@ -47,6 +51,7 @@ class Board:
                 for c in range(self.cols + 1):
                     line += "|" if self.vertical[r][c] else " "
                     if c < self.cols:
-                        line += " X " if (r, c) in self.completed else "   "
+                        owner = self.owners.get((r, c))
+                        line += f" {owner} " if owner else "   "
                 print(line)
         print()
