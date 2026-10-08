@@ -42,7 +42,7 @@ class DotsAndBoxes:
             else:
                 self.current = 1 - self.current
 
-        self.board.display(self.scores, self.current)
+        self.board.display(self.scores)
         print("Game over!")
         if self.scores[0] == self.scores[1]:
             print("The game is a draw.")

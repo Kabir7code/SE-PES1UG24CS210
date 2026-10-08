@@ -29,18 +29,24 @@ class Board:
         used = sum(map(sum, self.horizontal)) + sum(map(sum, self.vertical))
         return used == total
 
-    def display(self, scores, current):
+    def display(self, scores, current=None):
         print()
-        print(f"Scores: P1={scores[0]}  P2={scores[1]} | Turn: P{current + 1}")
+        status = f"Scores: P1={scores[0]}  P2={scores[1]}"
+        if current is not None:
+            status += f" | Turn: P{current + 1}"
+        print(status)
 
         for r in range(self.rows + 1):
-            print(".".join("---" if self.horizontal[r][c] else "   " for c in range(self.cols)))
+            line = "."
+            for c in range(self.cols):
+                line += ("---" if self.horizontal[r][c] else "   ") + "."
+            print(line)
+
             if r < self.rows:
-                middle = []
+                line = ""
                 for c in range(self.cols + 1):
-                    wall = "|" if self.vertical[r][c] else " "
-                    middle.append(wall)
+                    line += "|" if self.vertical[r][c] else " "
                     if c < self.cols:
-                        middle.append(" " + ("X" if (r, c) in self.completed else " ") + " ")
-                print("".join(middle))
+                        line += " X " if (r, c) in self.completed else "   "
+                print(line)
         print()
