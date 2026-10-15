@@ -24,9 +24,13 @@ def add_station(name, capacity, bikes, log=None):
 
 def rent_bike(station_id):
     """Rent one bike from a station; return True on success, else False."""
-    row = conn.execute("SELECT bikes FROM stations WHERE id = ?", (station_id,)).fetchone()
+    row = conn.execute(
+        "SELECT bikes FROM stations WHERE id = ?", (station_id,)
+    ).fetchone()
     if row and row[0] > 0:
-        conn.execute("UPDATE stations SET bikes = bikes - 1 WHERE id = ?", (station_id,))
+        conn.execute(
+            "UPDATE stations SET bikes = bikes - 1 WHERE id = ?", (station_id,)
+        )
         return True
     return False
 
@@ -38,21 +42,27 @@ def unlock_pin():
 
 def full_stations():
     """Return the names of stations where every dock holds a bike."""
-    stations = conn.execute("SELECT name FROM stations WHERE bikes = capacity").fetchall()
+    stations = conn.execute(
+        "SELECT name FROM stations WHERE bikes = capacity"
+    ).fetchall()
     return [s[0] for s in stations]
 
 
 def reset_station(station_id):
     """Set a station's bike count to zero, logging any database error."""
     try:
-        conn.execute("UPDATE stations SET bikes = 0 WHERE id = ?", (station_id,))
+        conn.execute(
+            "UPDATE stations SET bikes = 0 WHERE id = ?", (station_id,)
+        )
     except sqlite3.Error as err:
         logging.error("Could not reset station %s: %s", station_id, err)
 
 
 def has_bikes(station_id):
     """Return True if the station exists and has at least one bike."""
-    row = conn.execute("SELECT bikes FROM stations WHERE id = ?", (station_id,)).fetchone()
+    row = conn.execute(
+        "SELECT bikes FROM stations WHERE id = ?", (station_id,)
+    ).fetchone()
     if row is None or row[0] is None:
         return False
     return row[0] > 0
