@@ -1,0 +1,9 @@
+$ coverage run --branch -m pytest test_shopping_cart.py
+============================== 2 passed in 0.03s ===============================
+$ coverage report -m
+Name                    Stmts   Miss Branch BrPart  Cover   Missing
+-------------------------------------------------------------------
+shopping_cart.py           32     18     22      6    37%   6, 8, 11, 16-26, 31, 35, 37-39
+test_shopping_cart.py       6      0      0      0   100%
+-------------------------------------------------------------------
+TOTAL                      38     18     22      6    43%
